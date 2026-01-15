@@ -294,14 +294,12 @@ public class StarterBotTeleop extends OpMode {
         // up close shooting
         if(gamepad1.a){
             aimbot = false;
+            LAUNCHER_TARGET_VELOCITY = 1075;
+            deflector_angle = 0.72;
         }
         if(aimbot){
             LAUNCHER_TARGET_VELOCITY = predictLauncherTargetVelocity(tx, ty, ta);
             deflector_angle = predictDeflectorAngle(tx, ty, ta);
-        }
-        else{
-            LAUNCHER_TARGET_VELOCITY = 1075;
-            deflector_angle = 0.7;
         }
 
         if(gamepad1.leftBumperWasPressed()){
@@ -357,6 +355,8 @@ public class StarterBotTeleop extends OpMode {
          * Show the state and motor powers
          */
         telemetry.addData("State", launchState);
+        telemetry.addData("Aimbot", aimbot);
+        telemetry.addData("Movement Mode", movementMode);
         telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
         telemetry.addData("motorSpeed", launcher.getVelocity());
         telemetry.addData("targetLauncherSpd", LAUNCHER_TARGET_VELOCITY);
@@ -373,11 +373,15 @@ public class StarterBotTeleop extends OpMode {
     }
 
     double predictLauncherTargetVelocity(double tx, double ty, double ta){
-        return (-16.20092 * tx) + (0.753172 * ty) + (-343.11782 * ta) + 1948.95236;
+        double res = (-0.0117962 * Math.pow(tx, -19.61006)) + (-10.70755 * ty) + (-651.95767 * Math.pow(ta, 0.475642)) + (0.414501 * ty * Math.pow(ta, 3.88339)) + 2118.88916;
+        if(Double.isNaN(res)){ return LAUNCHER_TARGET_VELOCITY; }
+        return res;
     }
 
     double predictDeflectorAngle(double tx, double ty, double ta){
-        return (0.00251157 * tx) + (-0.000104396 * ty) + (-0.0506585 * ta) + 0.809729;
+        double res = (0.000203627 * Math.pow(tx, 1.97968)) + (-0.0361082 * Math.pow(ta, 1.56779)) + (0.000897474 * ty * Math.pow(ta, 2.52072)) + 0.801951;
+        if(Double.isNaN(res)){ return deflector_angle; }
+        return res;
     }
 
     /*
