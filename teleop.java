@@ -127,7 +127,13 @@ public class StarterBotTeleop extends OpMode {
         BLUE, RED
     }
 
-    private Alliance alliance;
+    private enum MovementMode{
+        MANUAL,
+        VISION_ASSISTED
+    }
+
+    private Alliance alliance = Alliance.RED;
+    private MovementMode movementMode = MovementMode.MANUAL;
 
     private LaunchState launchState;
 
@@ -261,7 +267,23 @@ public class StarterBotTeleop extends OpMode {
          * more complex maneuvers.
          */
          
-        arcadeDrive(-gamepad1.left_stick_y, gamepad1.right_stick_x);
+        switch(movementMode){
+            case MANUAL:
+                arcadeDrive(-gamepad1.left_stick_y, gamepad1.right_stick_x);
+                break;
+            case VISION_ASSISTED:
+                if(Math.abs(gamepad1.left_stick_y) + Math.abs(gamepad1.right_stick_x) > 0.05){
+                    movementMode = MovementMode.MANUAL;
+                    break;
+                }
+                else{
+                    if(Math.abs(tx) > 0.5){
+                        arcadeDrive(0, ((tx - 4) / 50));
+                    }
+                }
+                break;
+        }
+        
 
         vision();
 
@@ -280,6 +302,10 @@ public class StarterBotTeleop extends OpMode {
         else{
             LAUNCHER_TARGET_VELOCITY = 1075;
             deflector_angle = 0.7;
+        }
+
+        if(gamepad1.leftBumperWasPressed()){
+            movementMode = MovementMode.VISION_ASSISTED;
         }
 
         deflector_adjustment();
