@@ -135,9 +135,12 @@ public class StarterBotTeleop extends OpMode {
     double leftPower;
     double rightPower;
 
+    boolean foundTarget = false;
     double tx = 0.0; // target x
     double ty = 0.0; // target y
     double ta = 0.0; // target size
+
+    boolean aimbot = false;
 
     //int numShotsTaken = 0;
 
@@ -262,9 +265,21 @@ public class StarterBotTeleop extends OpMode {
 
         vision();
 
-        if(gamepad1.leftBumperWasPressed()){
+        // vision controlled aiming (aimbot)
+        if(gamepad1.x){
+            aimbot = true;
+        }
+        // up close shooting
+        if(gamepad1.a){
+            aimbot = false;
+        }
+        if(aimbot){
             LAUNCHER_TARGET_VELOCITY = predictLauncherTargetVelocity(tx, ty, ta);
             deflector_angle = predictDeflectorAngle(tx, ty, ta);
+        }
+        else{
+            LAUNCHER_TARGET_VELOCITY = 1075;
+            deflector_angle = 0.7;
         }
 
         deflector_adjustment();
@@ -274,7 +289,7 @@ public class StarterBotTeleop extends OpMode {
          * queuing a shot.
          */
         if (gamepad1.y) {
-            launcher.setVelocity(LAUNCHER_TARGET_VELOCITY);
+            launcher.setVelocity(LAUNCHER_TARGET_VELOCITY + 50);
         } else if (gamepad1.b) { // stop flywheel
             launcher.setVelocity(STOP_SPEED);
             //numShotsTaken = 0;
@@ -320,14 +335,23 @@ public class StarterBotTeleop extends OpMode {
         telemetry.addData("motorSpeed", launcher.getVelocity());
         telemetry.addData("targetLauncherSpd", LAUNCHER_TARGET_VELOCITY);
         telemetry.addData("deflector angle", launch_deflector.getPosition());
+
+        if(foundTarget){
+            telemetry.addData("Target X", tx);
+            telemetry.addData("Target Y", ty);
+            telemetry.addData("Target Area", ta);
+        }
+        else{
+            telemetry.addData("Limelight", "No Targets");
+        }        
     }
 
     double predictLauncherTargetVelocity(double tx, double ty, double ta){
-        return (1.69319 * tx) + (-66.37318 * ty) + (50.7958 * ta) + 2221.766;
+        return (-16.20092 * tx) + (0.753172 * ty) + (-343.11782 * ta) + 1948.95236;
     }
 
     double predictDeflectorAngle(double tx, double ty, double ta){
-        return (-0.00251157 * tx) + (-0.0232131 * ty) + (0.124653 * ta) + 0.917964;
+        return (0.00251157 * tx) + (-0.000104396 * ty) + (-0.0506585 * ta) + 0.809729;
     }
 
     /*
@@ -355,13 +379,10 @@ public class StarterBotTeleop extends OpMode {
             tx = result.getTx(); // target x
             ty = result.getTy(); // target y
             ta = result.getTa(); // how big the target is 0-100% of image
-
-            telemetry.addData("Target X", tx);
-            telemetry.addData("Target Y", ty);
-            telemetry.addData("Target Area", ta);
+            foundTarget = true;
         }
         else{
-            telemetry.addData("Limelight", "No Targets");
+            foundTarget = false;
         }
     }
 
@@ -379,7 +400,7 @@ public class StarterBotTeleop extends OpMode {
                 break;
             case SPIN_UP:
                 launcher.setVelocity(LAUNCHER_TARGET_VELOCITY);
-                if (launcher.getVelocity() > LAUNCHER_MIN_VELOCITY) {
+                if (launcher.getVelocity() > LAUNCHER_TARGET_VELOCITY - 65) {
                     launchState = LaunchState.LAUNCH;
                 }
                 break;
