@@ -347,11 +347,11 @@ public class StarterBotTeleop extends OpMode {
     }
 
     double predictLauncherTargetVelocity(double tx, double ty, double ta){
-        return (1.69319 * tx) + (-66.37318 * ty) + (50.7958 * ta) + 2221.766;
+        return (-16.20092 * tx) + (0.753172 * ty) + (-343.11782 * ta) + 1948.95236;
     }
 
     double predictDeflectorAngle(double tx, double ty, double ta){
-        return (-0.00251157 * tx) + (-0.0232131 * ty) + (0.124653 * ta) + 0.917964;
+        return (0.00251157 * tx) + (-0.000104396 * ty) + (-0.0506585 * ta) + 0.809729;
     }
 
     /*
