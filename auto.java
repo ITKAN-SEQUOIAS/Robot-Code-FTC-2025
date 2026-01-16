@@ -28,8 +28,9 @@ public class StarterBotAuto extends OpMode
         * velocity. Here we are setting the target and minimum velocity that the launcher should run
         * at. The minimum velocity is a threshold for determining when to fire.
         */
-    final double LAUNCHER_TARGET_VELOCITY = 1125;
-    final double LAUNCHER_MIN_VELOCITY = 1025;
+    final double LAUNCHER_TARGET_VELOCITY = 110;
+    final double LAUNCHER_MIN_VELOCITY = 1000;
+    double deflector_angle = 0.72;
 
     /*
         * The number of seconds that we wait between each of our 3 shots from the launcher. This
@@ -249,6 +250,7 @@ public class StarterBotAuto extends OpMode
         rightFeeder.setPower(0);
         leftFeeder.setPower(0);
 
+        launch_deflector.setPosition(deflector_angle);
 
         /*
             * Here we allow the driver to select which alliance we are on using the gamepad.
