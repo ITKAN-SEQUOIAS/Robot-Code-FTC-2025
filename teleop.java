@@ -298,8 +298,8 @@ public class StarterBotTeleop extends OpMode {
             deflector_angle = 0.72;
         }
         if(aimbot){
-            LAUNCHER_TARGET_VELOCITY = predictLauncherTargetVelocity(tx, ty, ta);
-            deflector_angle = predictDeflectorAngle(tx, ty, ta);
+            LAUNCHER_TARGET_VELOCITY = predictLauncherTargetVelocity();
+            deflector_angle = predictDeflectorAngle();
         }
 
         if(gamepad1.leftBumperWasPressed()){
@@ -372,16 +372,12 @@ public class StarterBotTeleop extends OpMode {
         }        
     }
 
-    double predictLauncherTargetVelocity(double tx, double ty, double ta){
-        double res = (-0.0117962 * Math.pow(tx, -19.61006)) + (-10.70755 * ty) + (-651.95767 * Math.pow(ta, 0.475642)) + (0.414501 * ty * Math.pow(ta, 3.88339)) + 2118.88916;
-        if(Double.isNaN(res)){ return LAUNCHER_TARGET_VELOCITY; }
-        return res;
+    double predictLauncherTargetVelocity(){
+        return (-3.6854 * tx) + (-63.33275 * ty) + (200.28503 * ta) + 1045.92454;
     }
 
-    double predictDeflectorAngle(double tx, double ty, double ta){
-        double res = (0.000203627 * Math.pow(tx, 1.97968)) + (-0.0361082 * Math.pow(ta, 1.56779)) + (0.000897474 * ty * Math.pow(ta, 2.52072)) + 0.801951;
-        if(Double.isNaN(res)){ return deflector_angle; }
-        return res;
+    double predictDeflectorAngle(){
+        return (0.000585708 * tx) + (0.0026128 * ty) + (-0.0224473 * ta) + 0.807977;
     }
 
     /*
@@ -429,8 +425,8 @@ public class StarterBotTeleop extends OpMode {
                 }
                 break;
             case SPIN_UP:
-                launcher.setVelocity(LAUNCHER_TARGET_VELOCITY + 30);
-                if (launcher.getVelocity() > LAUNCHER_TARGET_VELOCITY) {
+                launcher.setVelocity(LAUNCHER_TARGET_VELOCITY);
+                if (launcher.getVelocity() > LAUNCHER_TARGET_VELOCITY - 30) {
                     launchState = LaunchState.LAUNCH;
                 }
                 break;
