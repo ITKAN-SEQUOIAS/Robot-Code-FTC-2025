@@ -2,6 +2,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -28,7 +29,7 @@ public class StarterBotAuto extends OpMode
         * velocity. Here we are setting the target and minimum velocity that the launcher should run
         * at. The minimum velocity is a threshold for determining when to fire.
         */
-    final double LAUNCHER_TARGET_VELOCITY = 110;
+    final double LAUNCHER_TARGET_VELOCITY = 1150;
     final double LAUNCHER_MIN_VELOCITY = 1000;
     double deflector_angle = 0.72;
 
@@ -74,6 +75,7 @@ public class StarterBotAuto extends OpMode
     private DcMotorEx launcher = null;
     private CRServo leftFeeder = null;
     private CRServo rightFeeder = null;
+    private Servo launch_deflector = null;
 
     /*
         * TECH TIP: State Machines
@@ -186,6 +188,7 @@ public class StarterBotAuto extends OpMode
         launcher = hardwareMap.get(DcMotorEx.class,"launcher");
         leftFeeder = hardwareMap.get(CRServo.class, "left_feeder");
         rightFeeder = hardwareMap.get(CRServo.class, "right_feeder");
+        launch_deflector = hardwareMap.get(Servo.class, "launch_deflector");
 
 
         /*
@@ -250,8 +253,6 @@ public class StarterBotAuto extends OpMode
         rightFeeder.setPower(0);
         leftFeeder.setPower(0);
 
-        launch_deflector.setPosition(deflector_angle);
-
         /*
             * Here we allow the driver to select which alliance we are on using the gamepad.
             */
@@ -301,6 +302,8 @@ public class StarterBotAuto extends OpMode
             * of the members of the enum for a match, since if we find the "break" line in one case,
             * we know our enum isn't reflecting a different state.
             */
+            
+        launch_deflector.setPosition(deflector_angle);
         
         switch(autonomousState){
             case INIT:
