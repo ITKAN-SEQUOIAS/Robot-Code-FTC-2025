@@ -29,9 +29,8 @@ public class StarterBotAuto extends OpMode
         * velocity. Here we are setting the target and minimum velocity that the launcher should run
         * at. The minimum velocity is a threshold for determining when to fire.
         */
-    final double LAUNCHER_TARGET_VELOCITY = 1150;
-    final double LAUNCHER_MIN_VELOCITY = 1000;
-    double deflector_angle = 0.72;
+    final double LAUNCHER_TARGET_VELOCITY = 1075;
+    double deflector_angle = 0.715;
 
     /*
         * The number of seconds that we wait between each of our 3 shots from the launcher. This
@@ -374,7 +373,7 @@ public class StarterBotAuto extends OpMode
                     }
                     break;
                 case Program_ShootAndMove_DrivingOffLine:
-                    if(drive(DRIVE_SPEED, -25, DistanceUnit.INCH, 1)){
+                    if(drive(DRIVE_SPEED, -20, DistanceUnit.INCH, 1)){
                         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                         autonomousState = AutonomousState.COMPLETE;
@@ -590,7 +589,7 @@ public class StarterBotAuto extends OpMode
                 break;
             case PREPARE:
                 launcher.setVelocity(LAUNCHER_TARGET_VELOCITY);
-                if (launcher.getVelocity() > LAUNCHER_MIN_VELOCITY){
+                if (launcher.getVelocity() > LAUNCHER_TARGET_VELOCITY - 40 && launcher.getVelocity() < LAUNCHER_TARGET_VELOCITY + 40){
                     launchState = LaunchState.LAUNCH;
                     leftFeeder.setPower(1);
                     rightFeeder.setPower(1);

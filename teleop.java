@@ -83,10 +83,10 @@ public class StarterBotTeleop extends OpMode {
      * at. The minimum velocity is a threshold for determining when to fire.
      */
     double LAUNCHER_TARGET_VELOCITY = 1075;
-    double LAUNCHER_MIN_VELOCITY = 990;
-    double LAUNCHER_TARGET_VELOCITY_CHANGE = 100;
+    //double LAUNCHER_MIN_VELOCITY = 990;
+    double LAUNCHER_TARGET_VELOCITY_CHANGE = 25;
     
-    double deflector_angle = 0.7;
+    double deflector_angle = 0.715;
 
     // Declare OpMode members.
     private DcMotor leftDrive = null;
@@ -295,7 +295,7 @@ public class StarterBotTeleop extends OpMode {
         if(gamepad1.a){
             aimbot = false;
             LAUNCHER_TARGET_VELOCITY = 1075;
-            deflector_angle = 0.72;
+            deflector_angle = 0.715;
         }
         if(aimbot){
             LAUNCHER_TARGET_VELOCITY = predictLauncherTargetVelocity();
@@ -313,7 +313,7 @@ public class StarterBotTeleop extends OpMode {
          * queuing a shot.
          */
         if (gamepad1.y) {
-            launcher.setVelocity(LAUNCHER_TARGET_VELOCITY + 50);
+            launcher.setVelocity(LAUNCHER_TARGET_VELOCITY);
         } else if (gamepad1.b) { // stop flywheel
             launcher.setVelocity(STOP_SPEED);
             //numShotsTaken = 0;
@@ -426,7 +426,7 @@ public class StarterBotTeleop extends OpMode {
                 break;
             case SPIN_UP:
                 launcher.setVelocity(LAUNCHER_TARGET_VELOCITY);
-                if (launcher.getVelocity() > LAUNCHER_TARGET_VELOCITY - 30) {
+                if (launcher.getVelocity() > LAUNCHER_TARGET_VELOCITY - 40 && launcher.getVelocity() < LAUNCHER_TARGET_VELOCITY + 40) {
                     launchState = LaunchState.LAUNCH;
                 }
                 break;
